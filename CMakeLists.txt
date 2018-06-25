@@ -15,11 +15,13 @@ find_package(SDL2TTF)
 set(CW_PUZZLE_LIB_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/inc/dictionary.hpp
     ${CMAKE_CURRENT_LIST_DIR}/inc/constraint.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/inc/board.hpp
     )
 
 set(CW_PUZZLE_LIB_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/dictionary.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/constraint.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/board.cpp
     )
 
 

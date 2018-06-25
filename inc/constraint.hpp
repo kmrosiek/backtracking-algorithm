@@ -4,7 +4,7 @@ class Constraint
 {
     public:
         using dictionary_lookup = bool (*)(std::string);
-        virtual void check_constraint(dictionary_lookupi, std::string) = 0;
+        virtual void check_constraint(dictionary_lookup, std::string) = 0;
 };
 
 class Single_constraint
