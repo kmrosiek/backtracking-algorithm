@@ -9,7 +9,7 @@ class Board
 {
     public:
         using word_data = std::tuple<uint32_t, uint32_t, uint32_t>;
-        std::vector<Constraint> create_constraints_for_word_place(word_data);
+        std::vector<Constraint> create_constraints_for_word_footprint(word_data);
         void insert_word(std::string, word_data);
         void remove_word(word_data);
         std::vector<char> get_printable();
