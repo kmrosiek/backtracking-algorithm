@@ -9,12 +9,12 @@
 class Dictionary
 {
     public:
-    void load_from_file();
-    void remove_word(const std::string& word);
-    void add_word(const std::string& word);
-    bool does_word_exist(const std::string& word);
+    void load_words_from_file(const std::string&);
+    void remove_word(const std::string&);
+    void add_word(const std::string&);
+    bool does_word_exist(const std::string&) const;
     std::vector<std::string> create_domain_for_given_constraints(const std::vector<Constraint>&);
 
     private:
-    std::unordered_map<int, std::vector<std::string>> words_by_length;
+    std::unordered_map<int, std::vector<std::string>> m_words_by_length;
 };

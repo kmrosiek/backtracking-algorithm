@@ -70,7 +70,7 @@ bool backtracking()
             dictionary.remove_word(word); // if removing option enabled.
 
             //Update_GUI(SDL_Graphics);
-            if(true == recursive())
+            if(true == backtracking())
                 return true; // finished
 
             board.remove_word(random_footprint.get_data());
@@ -83,6 +83,7 @@ bool backtracking()
 }
 int main()
 {
+    dictionary.load_words_from_file("../resource/lemma.al");
     return 0;
 }
 
