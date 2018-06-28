@@ -29,12 +29,17 @@ void Dictionary::load_words_from_file(const std::string& file_path_and_name)
         // UI info: file reading failed.
     }
 }
+void Dictionary::insert_word(const std::string& word)
+{
+    m_words_by_length[word.size()].push_back(word);
+}
 void Dictionary::remove_word(const std::string& word)
-{}
-void Dictionary::add_word(const std::string& word)
 {}
 bool Dictionary::does_word_exist(const std::string& word) const
 {
+    if(m_words_by_length.count(word.size()) == 0)
+        return false;
+
     return true;
 }
 std::vector<std::string> Dictionary::create_domain_for_given_constraints(const std::vector<Constraint>&)

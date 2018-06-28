@@ -42,3 +42,5 @@ target_include_directories(${PROJECT_NAME} PRIVATE inc)
 target_link_libraries(${PROJECT_NAME} ${CW_PUZZLE_LIB})
 #target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${CW_PUZZLE_LIB})
 
+
+add_subdirectory(tests)

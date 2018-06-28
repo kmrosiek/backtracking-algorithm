@@ -74,7 +74,7 @@ bool backtracking()
                 return true; // finished
 
             board.remove_word(random_footprint.get_data());
-            dictionary.add_word(word); // if removing option enabled.
+            dictionary.insert_word(word); // if removing option enabled.
             shuffled_domain.pop();
         }
     }
