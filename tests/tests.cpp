@@ -27,8 +27,24 @@ TEST(DictionaryClass, insert_word)
     EXPECT_TRUE(dictionary.does_word_exist("Abrakadabra"));
     dictionary.insert_word("hello");
     EXPECT_TRUE(dictionary.does_word_exist("hello"));
-    EXPECT_TRUE(dictionary.does_word_exist("Hello"));
+    EXPECT_FALSE(dictionary.does_word_exist("Hello"));
     EXPECT_TRUE(dictionary.does_word_exist("Abrakadabra"));
+}
+TEST(DictionaryClass, remove_word)
+{
+    Dictionary dictionary;
+    dictionary.insert_word("hello");
+    dictionary.insert_word("Hello");
+    dictionary.insert_word("Mega");
+    EXPECT_TRUE(dictionary.does_word_exist("hello"));
+    EXPECT_TRUE(dictionary.does_word_exist("Hello"));
+    EXPECT_TRUE(dictionary.does_word_exist("Mega"));
+    dictionary.remove_word("hello");
+    dictionary.remove_word("Hello");
+    dictionary.remove_word("Mega");
+    EXPECT_FALSE(dictionary.does_word_exist("hello"));
+    EXPECT_FALSE(dictionary.does_word_exist("Hello"));
+    EXPECT_FALSE(dictionary.does_word_exist("Mega"));
 }
 
 TEST(DictionaryClass, load_words_from_file)

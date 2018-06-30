@@ -1,4 +1,4 @@
-project(main_tests)
+project(tests)
 
 find_package(GTest REQUIRED)
 

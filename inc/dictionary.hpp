@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 
 #include "constraint.hpp"
 
@@ -12,9 +13,9 @@ class Dictionary
     void load_words_from_file(const std::string&);
     void insert_word(const std::string&);
     void remove_word(const std::string&);
-    bool does_word_exist(const std::string&) const;
+    bool does_word_exist(const std::string&);
     std::vector<std::string> create_domain_for_given_constraints(const std::vector<Constraint>&);
 
     private:
-    std::unordered_map<int, std::vector<std::string>> m_words_by_length;
+    std::unordered_map<int, std::unordered_set<std::string>> m_words_by_length;
 };
