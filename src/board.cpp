@@ -8,13 +8,15 @@
 
 #include <iostream>
 constexpr char Board::EMPTY_FIELD;
+constexpr uint32_t Board::HORIZONTAL;
+constexpr uint32_t Board::VERTICAL;
 Board::Board(const uint32_t w, const uint32_t h) : m_width(w), m_height(h)
 {
     m_fields.resize(w * h, Field());
 }
-std::vector<Constraint> Board::create_constraints_for_word_footprint(Word_footprint)
+std::vector<Constraint> Board::create_constraints_for_word_footprint(const Word_footprint)
 {}
-void Board::insert_word(const std::string& word, Word_footprint word_footprint)
+void Board::insert_word(const std::string& word, const Word_footprint word_footprint)
 {
     uint32_t position = std::get<0>(word_footprint);
     uint32_t direction = std::get<1>(word_footprint);
@@ -23,8 +25,8 @@ void Board::insert_word(const std::string& word, Word_footprint word_footprint)
     if(word.size() != word_length)
         //DEBUG info
         return;
-    /// \todo replace 0 and 1 with HORIZONTAL and VERTICAL
-    if(direction == 0)
+
+    if(direction == HORIZONTAL)
     {
         uint32_t horizontal_pos = (position % m_width);
         if((horizontal_pos + word_length) > m_width)
@@ -41,7 +43,7 @@ void Board::insert_word(const std::string& word, Word_footprint word_footprint)
         }
 
     }
-    else if(direction == 1)
+    else if(direction == VERTICAL)
     {
         uint32_t vertical_pos = static_cast<int>(position/m_width);
         if((vertical_pos + word_length) > m_height)
@@ -63,8 +65,22 @@ void Board::insert_word(const std::string& word, Word_footprint word_footprint)
         return;
 
 }
-void Board::remove_word(Word_footprint)
-{}
+void Board::remove_word(const Word_footprint word_footprint)
+{
+    uint32_t position = std::get<0>(word_footprint);
+    uint32_t direction = std::get<1>(word_footprint);
+    uint32_t word_length = std::get<2>(word_footprint);
+
+    uint32_t shift = (direction == HORIZONTAL) ? 1 : m_width;
+
+    for(std::size_t i = 0; i < word_length; ++i)
+    {
+        m_fields[position + shift * i].counter--;
+        if(m_fields[position + shift * i].counter == 0)
+            m_fields[position + shift * i].character = EMPTY_FIELD;
+    }
+
+}
 std::vector<std::vector<char>> Board::get_printable()
 {
     std::vector<std::vector<char>> printable_board;

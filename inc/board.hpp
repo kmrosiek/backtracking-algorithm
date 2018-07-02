@@ -26,6 +26,10 @@ class Board
     public:
         /// Defines character which will be placed on the board when field is empty.
         constexpr static char EMPTY_FIELD = '~';
+        /// Used to determine a direction of the word on the board.
+        constexpr static uint32_t HORIZONTAL = 0;
+        /// Used to determine a direction of the word on the board.
+        constexpr static uint32_t VERTICAL = 1;
         /** Describes word footprint - a place on the board where the word will be placed.
          *  @param position in letter units.
          *  @param direction horizontal = 0 or vertical = 1.
@@ -37,11 +41,11 @@ class Board
          *  @param h - board height given in letters.
          */
         Board(const uint32_t, const uint32_t);
-        std::vector<Constraint> create_constraints_for_word_footprint(Word_footprint);
+        std::vector<Constraint> create_constraints_for_word_footprint(const Word_footprint);
         /// Inserts a given word into the board in a given footprint(Word_footprint).
-        void insert_word(const std::string&, Word_footprint);
+        void insert_word(const std::string&, const Word_footprint);
         /// Removes word from the board.
-        void remove_word(Word_footprint);
+        void remove_word(const Word_footprint);
         /** @brief Allows to get the board in a form of set of characters.
          *  @return Vector of vectors of characters, where main vector contains columns
          *  and vectors contain rows. If the board is of size 3x4 then the main vector will be
