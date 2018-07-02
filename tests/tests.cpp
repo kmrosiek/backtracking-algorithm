@@ -103,30 +103,23 @@ TEST(BoardClass, insert_word)
 
     Board board(5, 5);
     // Word size is larger than one in footprint.
-    Word_data word_footprint = Word_data(1,0,3);
-    board.insert_word("ThisIsTooLong", word_footprint);
+    board.insert_word("ThisIsTooLong", Word_data(1,0,3));
     // No string was given.
-    board.insert_word("", word_footprint);
+    board.insert_word("", Word_data(1,0,3));
     // "Car" should work.
-    board.insert_word("Car", word_footprint);
+    board.insert_word("Car", Word_data(1,0,3));
     // Round should work.
-    Word_data round_footprint = Word_data(3,1,5);
-    board.insert_word("round", round_footprint);
+    board.insert_word("round", Word_data(3,1,5));
     // Direction(second param) is wrong.
-    Word_data wrong_direct = Word_data(3,4,5);
-    board.insert_word("round", wrong_direct);
+    board.insert_word("round", Word_data(3,4,5));
     // Text would go out of border.
-    Word_data out_of_border = Word_data(3,0,6);
-    board.insert_word("border", out_of_border);
+    board.insert_word("border", Word_data(3,0,6));
     // Text would go out of border.
-    Word_data last_field_too_long = Word_data(24,0,3);
-    board.insert_word("out", last_field_too_long);
+    board.insert_word("out", Word_data(24,0,3));
     // Single letter in last square should work.
-    Word_data last_field = Word_data(24,0,1);
-    board.insert_word("z", last_field);
+    board.insert_word("z", Word_data(24,0,1));
     // Single letter in last square should work.
-    Word_data last_field_vert = Word_data(24,1,1);
-    board.insert_word("x", last_field_vert);
+    board.insert_word("x", Word_data(24,1,1));
 
     std::vector<std::vector<char>> printable_board = board.get_printable();
     std::string output = printable_to_string(printable_board);
