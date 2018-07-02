@@ -5,7 +5,7 @@ project(crossword_puzzle)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wextra -pedantic")
 
-set(CMAKE_MODULE_PATH /home/chris/Programming/ai_crossword_puzzle)
+set(CMAKE_MODULE_PATH /home/chris/Programming/new_ai_crossword/others)
 find_package(SDL2 REQUIRED)
 find_package(SDL_image REQUIRED)
 find_package(SDL2TTF)

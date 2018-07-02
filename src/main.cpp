@@ -8,7 +8,7 @@
 #include <chrono>
 #include <random>
 
-Board board;
+Board board(10,10);
 Dictionary dictionary;
 
 std::queue<std::string> shuffle_domain(std::vector<std::string> vec_domain)
