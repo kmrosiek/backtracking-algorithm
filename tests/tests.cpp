@@ -158,3 +158,112 @@ TEST(BoardClass, remove_word)
     EXPECT_STREQ("Ink~~~~~~~~arr~~~~~~~~~~~", output.c_str());
 
 }
+
+/** Tests if empty board produces no constraints for a given word.
+ */
+TEST(BoardClass, create_constraints_empty_board)
+{
+    ASSERT_EQ(Board::EMPTY_FIELD, '~');
+    using Word_data = std::tuple<uint32_t, uint32_t, uint32_t>;
+    using Constraints = std::vector<std::unique_ptr<Constraint>>;
+
+    Board board(5, 5);
+    Constraints constraints = board.create_constraints(
+            Word_data(5, Board::HORIZONTAL, 5));
+
+    EXPECT_EQ(constraints.size(), 0);
+
+}
+/** a s - -
+ *  $ - - -
+ *  $ - - -
+ *  $ - - -
+ */
+TEST(BoardClass, create_begin_constraints)
+{
+    ASSERT_EQ(Board::EMPTY_FIELD, '~');
+    using Word_data = std::tuple<uint32_t, uint32_t, uint32_t>;
+    using Constraints = std::vector<std::unique_ptr<Constraint>>;
+
+    Board board(4, 4);
+    board.insert_word("as", Word_data(0, Board::HORIZONTAL, 2));
+    Constraints constraints = board.create_constraints(
+            Word_data(2, Board::HORIZONTAL, 2));
+
+    EXPECT_EQ(constraints.size(), 1);
+    std::cout << typeid(constraints.at(0)).name() << std::endl;
+
+    //std::vector<std::vector<char>> printable_board = board.get_printable();
+    //std::string output = printable_to_string(printable_board);
+
+    //EXPECT_STREQ("~~t", output.c_str());
+}
+
+/*TEST(BoardClass, create_begin_constraints_vert)
+{
+    ASSERT_EQ(Board::EMPTY_FIELD, '~');
+    using Word_data = std::tuple<uint32_t, uint32_t, uint32_t>;
+    using Constraints = std::vector<std::unique_ptr<Constraint>>;
+
+    Board board(4, 4);
+    board.insert_word("as", Word_data(0, Board::VERTICAL, 2));
+    Constraints constraints = board.create_constraints(
+            Word_data(8, Board::VERTICAL, 2));
+
+    EXPECT_EQ(constraints.size(), 1);
+    std::cout << typeid(constraints.at(0)).name() << std::endl;
+
+    //std::vector<std::vector<char>> printable_board = board.get_printable();
+    //std::string output = printable_to_string(printable_board);
+
+    //EXPECT_STREQ("~~t", output.c_str());
+}
+
+
+TEST(BoardClass, create_constraints)
+{
+    ASSERT_EQ(Board::EMPTY_FIELD, '~');
+    using Word_data = std::tuple<uint32_t, uint32_t, uint32_t>;
+    using Constraints = std::vector<std::unique_ptr<Constraint>>;
+
+    Board board(5, 5);
+    board.insert_word("this", Word_data(2, Board::VERTICAL, 4));
+    Constraints constraints = board.create_constraints(
+            Word_data(5, Board::HORIZONTAL, 5));
+
+    EXPECT_EQ(constraints.size(), 1);
+    std::cout << typeid(constraints.at(0)).name() << std::endl;
+
+    //std::vector<std::vector<char>> printable_board = board.get_printable();
+    //std::string output = printable_to_string(printable_board);
+
+    //EXPECT_STREQ("~~t", output.c_str());
+}
+
+TEST(BoardClass, create_constraintsaa)
+{
+    ASSERT_EQ(Board::EMPTY_FIELD, '~');
+    using Word_data = std::tuple<uint32_t, uint32_t, uint32_t>;
+    using Constraints = std::vector<std::unique_ptr<Constraint>>;
+
+    Board board(5, 5);
+    board.insert_word("to~ls", Word_data(0, Board::HORIZONTAL, 5));
+    board.insert_word("am~go", Word_data(5, Board::HORIZONTAL, 5));
+    board.insert_word("~~~~~", Word_data(10, Board::HORIZONTAL, 5));
+    board.insert_word("pu~ls", Word_data(15, Board::HORIZONTAL, 5));
+    board.insert_word("tr~ge", Word_data(20, Board::HORIZONTAL, 5));
+    Constraints constraints = board.create_constraints(
+            Word_data(7, Board::HORIZONTAL, 2));
+    //constraints = board.create_constraints(Word_data(20, Board::HORIZONTAL, 5));
+    //constraints = board.create_constraints(Word_data(4, Board::VERTICAL, 2));
+    //constraints = board.create_constraints(Word_data(13, Board::VERTICAL, 2));
+
+    EXPECT_EQ(constraints.size(), 1);
+    for(auto& c : constraints)
+    std::cout << typeid(*c).name() << std::endl;
+
+    //std::vector<std::vector<char>> printable_board = board.get_printable();
+    //std::string output = printable_to_string(printable_board);
+
+    //EXPECT_STREQ("~~t", output.c_str());
+}*/

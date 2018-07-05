@@ -39,12 +39,13 @@ void Dictionary::remove_word(const std::string& word)
 }
 bool Dictionary::does_word_exist(const std::string& word)
 {
-    auto tmp_set = m_words_by_length[word.size()];
-    if(tmp_set.find(word) != tmp_set.end())
+    // Extract only words which length is equal to word.size().
+    auto set_of_word = m_words_by_length[word.size()];
+    if(set_of_word.find(word) != set_of_word.end())
         return true;
 
     return false;
 }
-std::vector<std::string> Dictionary::create_domain_for_given_constraints(const std::vector<Constraint>&)
+std::vector<std::string> Dictionary::create_domain(const std::vector<Constraint>&)
 {
 }

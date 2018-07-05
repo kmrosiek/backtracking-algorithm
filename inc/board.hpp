@@ -18,6 +18,7 @@
 #include <tuple>
 #include <string>
 #include <stdint.h>
+#include <memory>
 
 #include "constraint.hpp"
 
@@ -41,7 +42,8 @@ class Board
          *  @param h - board height given in letters.
          */
         Board(const uint32_t, const uint32_t);
-        std::vector<Constraint> create_constraints_for_word_footprint(const Word_footprint);
+        using Constraints = std::vector<std::unique_ptr<Constraint>>;
+        Constraints create_constraints(const Word_footprint) const;
         /// Inserts a given word into the board in a given footprint(Word_footprint).
         void insert_word(const std::string&, const Word_footprint);
         /// Removes word from the board.
@@ -55,9 +57,17 @@ class Board
          *  x x x<br>
          *  x x x<br>
          */
-        std::vector<std::vector<char>> get_printable();
+        std::vector<std::vector<char>> get_printable() const;
 
     private:
+        /** @brief Describes a single field on the board.
+         *  Each field can contain a character and number of times the character was placed there.
+         *  The character will be placed twice e.g. on word crossing.<br>
+         *  - c -<br>
+         *  c a t<br>
+         *  - r -<br>
+         *  The middle field with the character 'a' will have counter = 2.
+         */
         struct Field
         {
             Field()
@@ -71,8 +81,26 @@ class Board
 
         std::vector<Field> m_fields;
 
+        /// The board width in fields unit. (characters)
         uint32_t m_width;
+        /// The board height in fields unit. (characters)
         uint32_t m_height;
+
+        std::string create_horizontal_begin_constraint(std::size_t, std::size_t) const;
+        std::string create_horizontal_end_constraint(std::size_t, std::size_t, std::size_t) const;
+        std::string create_horizontal_path_constraint(std::size_t, std::size_t, std::size_t) const;
+        std::pair<
+        std::vector<std::pair<std::string, std::size_t>>,
+        std::vector<std::pair<std::string, std::size_t>>>
+        create_horizontal_sides_constraint(std::size_t, std::size_t, std::size_t) const;
+
+        std::string create_vertical_begin_constraint(std::size_t, std::size_t) const;
+        std::string create_vertical_end_constraint(std::size_t, std::size_t, std::size_t) const;
+        std::string create_vertical_path_constraint(std::size_t, std::size_t, std::size_t) const;
+        std::pair<
+        std::vector<std::pair<std::string, std::size_t>>,
+        std::vector<std::pair<std::string, std::size_t>>>
+        create_vertical_sides_constraint(std::size_t, std::size_t, std::size_t) const;
 
 };
 

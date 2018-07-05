@@ -14,7 +14,7 @@ class Dictionary
     void insert_word(const std::string&);
     void remove_word(const std::string&);
     bool does_word_exist(const std::string&);
-    std::vector<std::string> create_domain_for_given_constraints(const std::vector<Constraint>&);
+    std::vector<std::string> create_domain(const std::vector<Constraint>&);
 
     private:
     std::unordered_map<int, std::unordered_set<std::string>> m_words_by_length;

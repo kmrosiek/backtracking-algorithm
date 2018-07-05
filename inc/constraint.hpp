@@ -3,54 +3,66 @@
 class Constraint
 {
     public:
+        Constraint(std::string s) : constraint(s){}
         using dictionary_lookup = bool (*)(std::string);
         virtual void check_constraint(dictionary_lookup, std::string) = 0;
-};
-
-class Single_constraint
-{
+        virtual ~Constraint(){}
     protected:
         std::string constraint;
 };
 
-class Multiple_constraint
+
+class Path_constraint : public Constraint
+{
+    public:
+        Path_constraint(std::string s) : Constraint(s){}
+        void check_constraint(dictionary_lookup, std::string)
+        {
+        }
+};
+
+class Begin_constraint : public Constraint
+{
+    public:
+        Begin_constraint(std::string s) : Constraint(s){}
+        void check_constraint(dictionary_lookup, std::string)
+        {
+        }
+};
+class End_constraint : public Constraint
+{
+    public:
+        End_constraint(std::string s) : Constraint(s){}
+        void check_constraint(dictionary_lookup, std::string)
+        {
+        }
+};
+
+class Positioned_constraint
 {
     protected:
-        std::vector<std::string> constraints;
+        std::size_t position;
 };
 
-class Path_Constraint : public Constraint, public Single_constraint
+class Up_left_constraint : public Constraint, public Positioned_constraint
 {
     public:
+        Up_left_constraint(std::string s, std::size_t pos) : Constraint(s)
+        {
+            position = pos;
+        }
         void check_constraint(dictionary_lookup, std::string)
         {
         }
 };
 
-class Begin_constraint : public Constraint, public Single_constraint
+class Down_right_constraint : public Constraint, Positioned_constraint
 {
     public:
-        void check_constraint(dictionary_lookup, std::string)
+        Down_right_constraint(std::string s, std::size_t pos) : Constraint(s)
         {
+            position = pos;
         }
-};
-class End_constraint : public Constraint, public Single_constraint
-{
-    public:
-        void check_constraint(dictionary_lookup, std::string)
-        {
-        }
-};
-class Left_side_constraint : public Constraint, public Multiple_constraint
-{
-    public:
-        void check_constraint(dictionary_lookup, std::string)
-        {
-        }
-};
-class Right_side_constraint : public Constraint, public Multiple_constraint
-{
-    public:
         void check_constraint(dictionary_lookup, std::string)
         {
         }

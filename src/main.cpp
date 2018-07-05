@@ -58,8 +58,8 @@ bool backtracking()
         };
 
         Word_footprint random_footprint(10,12);
-        std::vector<Constraint> word_footprint_constraint = board.create_constraints_for_word_footprint(random_footprint.get_data());
-        std::vector<std::string> ordered_domain = dictionary.create_domain_for_given_constraints(word_footprint_constraint);
+        std::vector<Constraint> word_footprint_constraint ;//= board.create_constraints(random_footprint.get_data());
+        std::vector<std::string> ordered_domain = dictionary.create_domain(word_footprint_constraint);
         std::queue<std::string> shuffled_domain = shuffle_domain(ordered_domain);
 
         while(!shuffled_domain.empty())
