@@ -45,16 +45,12 @@ class Board
         /// Removes word from the board.
         void remove_word(const Word_footprint&);
 
-        /** @brief Allows to get the board in a form of set of characters.
-         *  @return Vector of vectors of characters, where main vector contains columns
-         *  and vectors contain rows. If the board is of size 3x4 then the main vector will be
-         *  of size 4 (containing 4 vectors). Each sub vector will contain 3 characters.<br>
-         *  x x x<br>
-         *  x x x<br>
-         *  x x x<br>
-         *  x x x<br>
+        /** @brief Allows to get the board in a form of a sequence of characters.
+         *  @return Vector of characters, containing m_width * m_height characters.
+         *  In order to print the board properly m_width will be needed.
          */
         std::vector<char> get_printable() const;
+        /// @return m_width - the board width, number of characters in a row.
         uint32_t get_width() const noexcept { return m_width;}
 
     private:
@@ -77,11 +73,14 @@ class Board
             uint32_t counter;
         };
 
+        /* Fields on the board. Number of fields = m_width * m_height. When the board is created
+         * fields are filled with EMPTY_BOARD character.
+         */
         std::vector<Field> m_fields;
 
-        /// The board width in fields unit. (characters)
+        /// The board width  - number of characters in a row.
         uint32_t m_width;
-        /// The board height in fields unit. (characters)
+        /// The board height - number of characters in a column.
         uint32_t m_height;
 };
 
