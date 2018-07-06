@@ -33,11 +33,19 @@ void Dictionary::load_words_from_file(const std::string& file_path_and_name)
 }
 void Dictionary::insert_word(const std::string& word)
 {
-    m_words_by_length[word.size()].insert(word);
+    if(0 == m_words_by_length.count(word.size()))
+        m_words_by_length.insert(std::make_pair(word.size(),
+                    std::unordered_set<std::string>{word}));
+    else
+        m_words_by_length.at(word.size()).insert(word);
 }
+#include <iostream>
 void Dictionary::remove_word(const std::string& word)
 {
-    m_words_by_length[word.length()].erase(word);
+    if(0 == m_words_by_length.count(word.size()))
+        return;
+
+    m_words_by_length.at(word.length()).erase(word);
 }
 bool Dictionary::does_word_exist(const std::string& word) const
 {
