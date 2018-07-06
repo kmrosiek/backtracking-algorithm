@@ -1,11 +1,11 @@
 #pragma once
 
-#include "constraint.hpp"
-
 #include <string>
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
+
+class Constraints;
 
 
 class Dictionary

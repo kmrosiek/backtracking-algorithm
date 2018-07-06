@@ -31,6 +31,7 @@ void Dictionary::load_words_from_file(const std::string& file_path_and_name)
         // UI info: file reading failed.
     }
 }
+
 void Dictionary::insert_word(const std::string& word)
 {
     if(0 == m_words_by_length.count(word.size()))
@@ -39,7 +40,7 @@ void Dictionary::insert_word(const std::string& word)
     else
         m_words_by_length.at(word.size()).insert(word);
 }
-#include <iostream>
+
 void Dictionary::remove_word(const std::string& word)
 {
     if(0 == m_words_by_length.count(word.size()))
@@ -47,6 +48,7 @@ void Dictionary::remove_word(const std::string& word)
 
     m_words_by_length.at(word.length()).erase(word);
 }
+
 bool Dictionary::does_word_exist(const std::string& word) const
 {
     if(0 == m_words_by_length.count(word.size()))

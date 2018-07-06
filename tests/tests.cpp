@@ -1,6 +1,7 @@
 #include "dictionary.hpp"
 #include "board.hpp"
 #include "word_footprint.hpp"
+#include "constraint.hpp"
 
 #include <gtest/gtest.h>
 #include <string>

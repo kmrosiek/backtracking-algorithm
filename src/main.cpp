@@ -1,6 +1,7 @@
 #include "board.hpp"
 #include "dictionary.hpp"
 #include "word_footprint.hpp"
+#include "constraint.hpp"
 
 #include <queue>
 #include <vector>
