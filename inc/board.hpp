@@ -14,13 +14,14 @@
  * @endcode
  * @example board_example.cpp
  */
+#pragma once
+
+#include "word_footprint.hpp"
+
 #include <vector>
-#include <tuple>
 #include <string>
 #include <stdint.h>
-#include <memory>
 
-#include "constraint.hpp"
 
 class Board
 {
@@ -31,23 +32,19 @@ class Board
         constexpr static uint32_t HORIZONTAL = 0;
         /// Used to determine a direction of the word on the board.
         constexpr static uint32_t VERTICAL = 1;
-        /** Describes word footprint - a place on the board where the word will be placed.
-         *  @param position in letter units.
-         *  @param direction horizontal = 0 or vertical = 1.
-         *  @param word_length
-         */
-        using Word_footprint = std::tuple<uint32_t, uint32_t, uint32_t>;
+
         /** @brief Resizes vector of fields to board size. Fields are assigned with '~' character.
          *  @param w - board width given in letters.
          *  @param h - board height given in letters.
          */
         Board(const uint32_t, const uint32_t);
-        using Constraints = std::vector<std::unique_ptr<Constraint>>;
-        Constraints create_constraints(const Word_footprint) const;
+        //using Constraints = std::vector<std::unique_ptr<Constraint>>;
+        //Constraints create_constraints(const Word_footprint) const;
         /// Inserts a given word into the board in a given footprint(Word_footprint).
-        void insert_word(const std::string&, const Word_footprint);
+        void insert_word(const std::string&, const Word_footprint&);
         /// Removes word from the board.
-        void remove_word(const Word_footprint);
+        void remove_word(const Word_footprint&);
+
         /** @brief Allows to get the board in a form of set of characters.
          *  @return Vector of vectors of characters, where main vector contains columns
          *  and vectors contain rows. If the board is of size 3x4 then the main vector will be
@@ -57,7 +54,8 @@ class Board
          *  x x x<br>
          *  x x x<br>
          */
-        std::vector<std::vector<char>> get_printable() const;
+        std::vector<char> get_printable() const;
+        uint32_t get_width() const noexcept { return m_width;}
 
     private:
         /** @brief Describes a single field on the board.
@@ -85,22 +83,5 @@ class Board
         uint32_t m_width;
         /// The board height in fields unit. (characters)
         uint32_t m_height;
-
-        std::string create_horizontal_begin_constraint(std::size_t, std::size_t) const;
-        std::string create_horizontal_end_constraint(std::size_t, std::size_t, std::size_t) const;
-        std::string create_horizontal_path_constraint(std::size_t, std::size_t, std::size_t) const;
-        std::pair<
-        std::vector<std::pair<std::string, std::size_t>>,
-        std::vector<std::pair<std::string, std::size_t>>>
-        create_horizontal_sides_constraint(std::size_t, std::size_t, std::size_t) const;
-
-        std::string create_vertical_begin_constraint(std::size_t, std::size_t) const;
-        std::string create_vertical_end_constraint(std::size_t, std::size_t, std::size_t) const;
-        std::string create_vertical_path_constraint(std::size_t, std::size_t, std::size_t) const;
-        std::pair<
-        std::vector<std::pair<std::string, std::size_t>>,
-        std::vector<std::pair<std::string, std::size_t>>>
-        create_vertical_sides_constraint(std::size_t, std::size_t, std::size_t) const;
-
 };
 

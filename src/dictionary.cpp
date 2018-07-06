@@ -2,6 +2,8 @@
 #include "constraint.hpp"
 
 #include <fstream>
+#include <string>
+#include <vector>
 
 void Dictionary::load_words_from_file(const std::string& file_path_and_name)
 {
@@ -37,15 +39,33 @@ void Dictionary::remove_word(const std::string& word)
 {
     m_words_by_length[word.length()].erase(word);
 }
-bool Dictionary::does_word_exist(const std::string& word)
+bool Dictionary::does_word_exist(const std::string& word) const
 {
+    if(0 == m_words_by_length.count(word.size()))
+        return false;
+
     // Extract only words which length is equal to word.size().
-    auto set_of_word = m_words_by_length[word.size()];
+    auto set_of_word = m_words_by_length.at(word.size());
     if(set_of_word.find(word) != set_of_word.end())
         return true;
 
     return false;
 }
-std::vector<std::string> Dictionary::create_domain(const std::vector<Constraint>&)
+
+bool intermediate(const Dictionary& dic, const std::string& word)
 {
+    return dic.does_word_exist(word);
+}
+
+std::vector<std::string> Dictionary::create_domain(const std::size_t word_length,
+        const Constraints& constraints)
+{
+    std::vector<std::string> ordered_domain;
+    for(const std::string& word : m_words_by_length[word_length])
+    {
+        if(constraints.check_constraint(&intermediate, *this, word))
+            ordered_domain.push_back(word);
+    }
+
+   return ordered_domain;
 }

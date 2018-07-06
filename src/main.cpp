@@ -1,5 +1,6 @@
 #include "board.hpp"
 #include "dictionary.hpp"
+#include "word_footprint.hpp"
 
 #include <queue>
 #include <vector>
@@ -11,7 +12,7 @@
 Board board(10,10);
 Dictionary dictionary;
 
-std::queue<std::string> shuffle_domain(std::vector<std::string> vec_domain)
+std::queue<std::string> shuffle_domain(std::vector<std::string>& vec_domain)
 {
 
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -19,7 +20,7 @@ std::queue<std::string> shuffle_domain(std::vector<std::string> vec_domain)
     std::shuffle(std::begin(vec_domain), std::end(vec_domain), e);
 
     std::queue<std::string> shuffled_domain;
-    for(std::string word : vec_domain)
+    for(const std::string& word : vec_domain)
         shuffled_domain.push(word);
 
     return shuffled_domain;
@@ -31,54 +32,35 @@ bool backtracking()
 
     for(int i = 0; i < 2; i++)//for(number_of_different_position_selection)
     {
-        class Word_footprint
-        {
-            public:
-            Word_footprint(uint32_t board_width, uint32_t board_height)
-            {
-                //randoms();
-                position = 3;
-                direction = 1;
-                word_length = 4;
-                /*position = random_position(BOARD_WIDTH, BOARD_HEIGHT);
-                  direction = random_direction(); // returns 0 or 1 (LEFT or RIGHT)
-                  distance_to_border = calculate_distance_to_border(position, direction);
-                  word_length = random_word_length(distance_to_border);*/
-            }
-
-            std::tuple<uint32_t, uint32_t, uint32_t> get_data() const noexcept
-            {
-                return std::make_tuple(position, direction, word_length);
-            }
-
-            private:
-            uint32_t position;
-            uint32_t direction;
-            uint32_t word_length;
-        };
-
-        Word_footprint random_footprint(10,12);
-        std::vector<Constraint> word_footprint_constraint ;//= board.create_constraints(random_footprint.get_data());
-        std::vector<std::string> ordered_domain = dictionary.create_domain(word_footprint_constraint);
+        // Create random footprint - position, direction and word_length for current iteration.
+        Word_footprint random_footprint(10, 12);
+        // Create constraints for footprint. Needs footprint and board. Returns Constraint class that takes
+        // pointer to dictionary lookup function and word to be checked.
+        Constraints constraints(random_footprint, board.get_printable(), board.get_width());
+        // Create domain - set of words with a given length and that satisfy given constraints.
+        std::vector<std::string> ordered_domain = dictionary.create_domain(
+                random_footprint.get_word_length(), constraints);
+                }/*
+                random_footprint.get_word_length(), word_footprint_constraint);
         std::queue<std::string> shuffled_domain = shuffle_domain(ordered_domain);
 
         while(!shuffled_domain.empty())
         {
             //std::string word = random_word_from_domain(domain);
             std::string word = shuffled_domain.front();
-            board.insert_word(word, random_footprint.get_data());
+            board.insert_word(word, random_footprint);
             dictionary.remove_word(word); // if removing option enabled.
 
             //Update_GUI(SDL_Graphics);
             if(true == backtracking())
                 return true; // finished
 
-            board.remove_word(random_footprint.get_data());
+            board.remove_word(random_footprint);
             dictionary.insert_word(word); // if removing option enabled.
             shuffled_domain.pop();
         }
     }
-
+*/
     return false;
 }
 int main()
