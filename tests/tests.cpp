@@ -78,14 +78,12 @@ std::string printable_to_string(const std::vector<char>& printable)
     return output;
 }
 
-
+/** Checks if board.get_printable function prints empty board correctly.
+ */
 TEST(BoardClass, get_printable)
 {
     Board board(4, 4);
-    std::vector<char> printable_board;
-    printable_board = board.get_printable();
-
-    std::string actual_board = printable_to_string(printable_board);
+    std::string actual_board = printable_to_string(board.get_printable());
 
     EXPECT_STREQ("~~~~~~~~~~~~~~~~", actual_board.c_str());
 }
@@ -120,8 +118,7 @@ TEST(BoardClass, insert_word)
     // Single letter in last square should work.
     board.insert_word("x", Word_footprint(24,1,1));
 
-    std::vector<char> printable_board = board.get_printable();
-    std::string output = printable_to_string(printable_board);
+    std::string output = printable_to_string(board.get_printable());
 
     EXPECT_STREQ("~Car~~~~o~~~~u~~~~n~~~~dx", output.c_str());
 }
@@ -136,8 +133,7 @@ TEST(BoardClass, remove_word)
     board.insert_word("arr", Word_footprint(11,0,3));
     board.insert_word("matma", Word_footprint(15,0,5));
 
-    std::vector<char> printable_board = board.get_printable();
-    std::string output = printable_to_string(printable_board);
+    std::string output = printable_to_string(board.get_printable());
 
     EXPECT_STREQ("Ink~~~~a~~~arr~matma~~~~~", output.c_str());
 
@@ -150,8 +146,7 @@ TEST(BoardClass, remove_word)
     board.remove_word(Word_footprint(4, 1, 5));
     board.remove_word(Word_footprint(20, 0, 5));
 
-    printable_board = board.get_printable();
-    output = printable_to_string(printable_board);
+    output = printable_to_string(board.get_printable());
 
     EXPECT_STREQ("Ink~~~~~~~~arr~~~~~~~~~~~", output.c_str());
 
@@ -159,7 +154,7 @@ TEST(BoardClass, remove_word)
 
 /** Tests if empty board produces no constraints for a given word.
  */
-TEST(BoardClass, create_constraints_empty_board)
+TEST(ConstraintsClass, create_constraints_empty_board)
 {
     ASSERT_EQ(Board::EMPTY_FIELD, '~');
 
