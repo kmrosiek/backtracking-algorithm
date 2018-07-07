@@ -7,7 +7,7 @@
 
 #include <iostream> // to be deleted
 
-Constraints::Constraints(const Word_footprint footprint, const std::vector<char> board
+Constraints::Constraints(const Word_footprint& footprint, const std::vector<char> board
         , const std::size_t board_width)
     : m_x(footprint.get_position() % board_width)
     , m_y((footprint.get_position() / board_width) * board_width)
@@ -25,7 +25,7 @@ Constraints::Constraints(const Word_footprint footprint, const std::vector<char>
 //bool Constraints::check_constraint(std::function<bool(const Dictionary&, const std::string&)>, const std::string&) const;
 bool Constraints::check_constraint(Dictionary_lookup lookup, const Dictionary& dictionary, const std::string& word) const
 {
-    for(const std::unique_ptr<Base_constraint>& cons: constraints_container)
+    for(const std::unique_ptr<Base_constraint>& cons: m_constraints_container)
         if(!lookup(dictionary, cons->create_word(word)))
             return false;
 
@@ -54,10 +54,10 @@ void Constraints::create_constraints()
     }
 
     // DEBUG info
-    bool output = true;
+    bool output = false;
     if(output){
-        std::cout << "Number of constraints: " << constraints_container.size() << std::endl;
-        for(const std::unique_ptr<Base_constraint>& c : constraints_container)
+        std::cout << "Number of constraints: " << m_constraints_container.size() << std::endl;
+        for(const std::unique_ptr<Base_constraint>& c : m_constraints_container)
             std::cout << typeid(*c).name() << std::endl;
     }
 }
@@ -74,7 +74,7 @@ void Constraints::create_horizontal_begin_constraint()
     }
 
     if(!begin_constraint.empty())
-        constraints_container.emplace_back(new Begin_constraint{begin_constraint});
+        m_constraints_container.emplace_back(new Begin_constraint{begin_constraint});
 }
 
 void Constraints::create_horizontal_end_constraint()
@@ -89,7 +89,7 @@ void Constraints::create_horizontal_end_constraint()
     }
 
     if(!end_constraint.empty())
-        constraints_container.emplace_back(new End_constraint{end_constraint});
+        m_constraints_container.emplace_back(new End_constraint{end_constraint});
 }
 
 void Constraints::create_horizontal_path_constraint()
@@ -108,7 +108,7 @@ void Constraints::create_horizontal_path_constraint()
         path_constraint.clear();    // constraint is not kept.
 
     if(!path_constraint.empty())
-        constraints_container.emplace_back(new Path_constraint{path_constraint});
+        m_constraints_container.emplace_back(new Path_constraint{path_constraint});
 }
 
 void Constraints::create_horizontal_sides_constraint()
@@ -124,7 +124,7 @@ void Constraints::create_horizontal_sides_constraint()
                 break;
         }
         if(!constr.empty())
-            constraints_container.emplace_back(new Up_left_constraint{constr, letter_pos});
+            m_constraints_container.emplace_back(new Up_left_constraint{constr, letter_pos});
 
         constr.clear();
         for(std::size_t shift = 1, expr; (expr = m_x + m_y + (shift * m_width) + letter_pos)
@@ -136,7 +136,7 @@ void Constraints::create_horizontal_sides_constraint()
                 break;
         }
         if(!constr.empty())
-            constraints_container.emplace_back(new Down_right_constraint{constr, letter_pos});
+            m_constraints_container.emplace_back(new Down_right_constraint{constr, letter_pos});
     }
 }
 
@@ -152,7 +152,7 @@ void Constraints::create_vertical_begin_constraint()
     }
 
     if(!begin_constraint.empty())
-        constraints_container.emplace_back(new Begin_constraint{begin_constraint});
+        m_constraints_container.emplace_back(new Begin_constraint{begin_constraint});
 }
 
 void Constraints::create_vertical_end_constraint()
@@ -167,7 +167,7 @@ void Constraints::create_vertical_end_constraint()
     }
 
     if(!end_constraint.empty())
-        constraints_container.emplace_back(new End_constraint{end_constraint});
+        m_constraints_container.emplace_back(new End_constraint{end_constraint});
 }
 
 void Constraints::create_vertical_path_constraint()
@@ -185,7 +185,7 @@ void Constraints::create_vertical_path_constraint()
         path_constraint.clear();    // constraint is not kept.
 
     if(!path_constraint.empty())
-        constraints_container.emplace_back(new Path_constraint{path_constraint});
+        m_constraints_container.emplace_back(new Path_constraint{path_constraint});
 }
 void Constraints::create_vertical_sides_constraint()
 {
@@ -200,7 +200,7 @@ void Constraints::create_vertical_sides_constraint()
                 break;
         }
         if(!constr.empty())
-            constraints_container.emplace_back(new Up_left_constraint{constr, letter_pos});
+            m_constraints_container.emplace_back(new Up_left_constraint{constr, letter_pos});
 
         constr.clear();
         for(std::size_t shift = 1, expr; (expr = m_x + m_y + shift + (letter_pos * m_width)) % m_width != 0; ++shift)
@@ -211,7 +211,7 @@ void Constraints::create_vertical_sides_constraint()
                 break;
         }
         if(!constr.empty())
-            constraints_container.emplace_back(new Down_right_constraint{constr, letter_pos});
+            m_constraints_container.emplace_back(new Down_right_constraint{constr, letter_pos});
     }
 
 }
@@ -224,14 +224,12 @@ std::string Path_constraint::create_word(const std::string& word) const
 
 std::string Begin_constraint::create_word(const std::string& word) const
 {
-    std::string composed_word;
-    return composed_word;
+    return (m_constraint + word);
 }
 
 std::string End_constraint::create_word(const std::string& word) const
 {
-    std::string composed_word;
-    return composed_word;
+    return (word + m_constraint);
 }
 
 std::string Up_left_constraint::create_word(const std::string& word) const

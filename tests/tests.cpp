@@ -153,107 +153,252 @@ TEST(BoardClass, remove_word)
 
 }
 
+/*--------------------------------------------------------------------------------
+------------------------CONSTRAINTS-CLASS-TESTS------------------------------------
+--------------------------------------------------------------------------------*/
+
+/** Allows to test check_constraint functionality.
+ */
+bool intermediate_for_tests(const Dictionary& dic, const std::string& word)
+{
+    return dic.does_word_exist(word);
+}
+
 /** Tests if empty board produces no constraints for a given word.
+ *  Checking constraint should return true for whatever word.
  */
 TEST(ConstraintsClass, create_constraints_empty_board)
 {
     ASSERT_EQ(Board::EMPTY_FIELD, '~');
 
     Board board(5, 5);
+    Dictionary dic;
     Constraints constraints(Word_footprint(5, Board::HORIZONTAL, 5), board.get_printable(),
             board.get_width());
+    EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "those"));
 
-}
-/** a s - -
- *  $ - - -
- *  $ - - -
- *  $ - - -
- */
-/*TEST(BoardClass, create_begin_constraints)
-{
-    ASSERT_EQ(Board::EMPTY_FIELD, '~');
-    using Word_footprint = std::tuple<uint32_t, uint32_t, uint32_t>;
-    using Constraints = std::vector<std::unique_ptr<Constraint>>;
-
-    Board board(4, 4);
-    board.insert_word("as", Word_footprint(0, Board::HORIZONTAL, 2));
-    Constraints constraints = board.create_constraints(
-            Word_footprint(2, Board::HORIZONTAL, 2));
-
-    EXPECT_EQ(constraints.size(), 1);
-    std::cout << typeid(constraints.at(0)).name() << std::endl;
-
-    //std::vector<std::vector<char>> printable_board = board.get_printable();
-    //std::string output = printable_to_string(printable_board);
-
-    //EXPECT_STREQ("~~t", output.c_str());
-}*/
-
-/*TEST(BoardClass, create_begin_constraints_vert)
-{
-    ASSERT_EQ(Board::EMPTY_FIELD, '~');
-    using Word_footprint = std::tuple<uint32_t, uint32_t, uint32_t>;
-    using Constraints = std::vector<std::unique_ptr<Constraint>>;
-
-    Board board(4, 4);
-    board.insert_word("as", Word_footprint(0, Board::VERTICAL, 2));
-    Constraints constraints = board.create_constraints(
-            Word_footprint(8, Board::VERTICAL, 2));
-
-    EXPECT_EQ(constraints.size(), 1);
-    std::cout << typeid(constraints.at(0)).name() << std::endl;
-
-    //std::vector<std::vector<char>> printable_board = board.get_printable();
-    //std::string output = printable_to_string(printable_board);
-
-    //EXPECT_STREQ("~~t", output.c_str());
+    dic.insert_word("those");
+    Constraints constraints2(Word_footprint(5, Board::HORIZONTAL, 5), board.get_printable(),
+            board.get_width());
+    EXPECT_TRUE(constraints2.check_constraint(intermediate_for_tests, dic, "those"));
 }
 
-
-TEST(BoardClass, create_constraints)
+TEST(ConstraintsClass, create_begin_constraints_horizontal)
 {
     ASSERT_EQ(Board::EMPTY_FIELD, '~');
-    using Word_footprint = std::tuple<uint32_t, uint32_t, uint32_t>;
-    using Constraints = std::vector<std::unique_ptr<Constraint>>;
 
+    Dictionary dic;
+    dic.insert_word("angel");
     Board board(5, 5);
-    board.insert_word("this", Word_footprint(2, Board::VERTICAL, 4));
-    Constraints constraints = board.create_constraints(
-            Word_footprint(5, Board::HORIZONTAL, 5));
 
-    EXPECT_EQ(constraints.size(), 1);
-    std::cout << typeid(constraints.at(0)).name() << std::endl;
+    // ---- Horizontal left-top corner test
+    board.insert_word("an", Word_footprint(0, Board::HORIZONTAL, 2));
+    {
+        Constraints constraints(Word_footprint(2, Board::HORIZONTAL, 2), board.get_printable(),
+                board.get_width());
 
-    //std::vector<std::vector<char>> printable_board = board.get_printable();
-    //std::string output = printable_to_string(printable_board);
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "ant"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "gel"));
+    }
 
-    //EXPECT_STREQ("~~t", output.c_str());
+    // ---- horizontal left-bottom corner test
+
+    board.insert_word("an", Word_footprint(20, Board::HORIZONTAL, 2));
+    {
+        Constraints constraints(Word_footprint(22, Board::HORIZONTAL, 2), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "ant"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "gel"));
+    }
+
+    // ---- horizontal not continuous constraint.
+
+    dic.insert_word("tgel");
+    board.insert_word("a~t", Word_footprint(15, Board::HORIZONTAL, 3));
+    {
+        Constraints constraints(Word_footprint(18, Board::HORIZONTAL, 2), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "ant"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "gel"));
+    }
+
+    // ---- horizontal long constraint
+
+    dic.insert_word("helps");
+    board.insert_word("help", Word_footprint(10, Board::HORIZONTAL, 4));
+    {
+        Constraints constraints(Word_footprint(14, Board::HORIZONTAL, 1), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "x"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "s"));
+    }
 }
 
-TEST(BoardClass, create_constraintsaa)
+TEST(ConstraintsClass, create_begin_constraints_vertical)
 {
     ASSERT_EQ(Board::EMPTY_FIELD, '~');
-    using Word_footprint = std::tuple<uint32_t, uint32_t, uint32_t>;
-    using Constraints = std::vector<std::unique_ptr<Constraint>>;
 
+    Dictionary dic;
+    dic.insert_word("angel");
     Board board(5, 5);
-    board.insert_word("to~ls", Word_footprint(0, Board::HORIZONTAL, 5));
-    board.insert_word("am~go", Word_footprint(5, Board::HORIZONTAL, 5));
-    board.insert_word("~~~~~", Word_footprint(10, Board::HORIZONTAL, 5));
-    board.insert_word("pu~ls", Word_footprint(15, Board::HORIZONTAL, 5));
-    board.insert_word("tr~ge", Word_footprint(20, Board::HORIZONTAL, 5));
-    Constraints constraints = board.create_constraints(
-            Word_footprint(7, Board::HORIZONTAL, 2));
-    //constraints = board.create_constraints(Word_footprint(20, Board::HORIZONTAL, 5));
-    //constraints = board.create_constraints(Word_footprint(4, Board::VERTICAL, 2));
-    //constraints = board.create_constraints(Word_footprint(13, Board::VERTICAL, 2));
 
-    EXPECT_EQ(constraints.size(), 1);
-    for(auto& c : constraints)
-    std::cout << typeid(*c).name() << std::endl;
+    // ---- vertical left-top corner test
 
-    //std::vector<std::vector<char>> printable_board = board.get_printable();
-    //std::string output = printable_to_string(printable_board);
+    board.insert_word("an", Word_footprint(0, Board::VERTICAL, 2));
+    {
+        Constraints constraints(Word_footprint(10, Board::VERTICAL, 2), board.get_printable(),
+                board.get_width());
 
-    //EXPECT_STREQ("~~t", output.c_str());
-}*/
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "ant"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "gel"));
+    }
+
+    // ---- vertical right-top corner test
+
+    board.insert_word("an", Word_footprint(4, Board::VERTICAL, 2));
+    {
+        Constraints constraints(Word_footprint(14, Board::VERTICAL, 2), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "ant"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "gel"));
+    }
+
+    // ---- vertical not continuous constraint
+
+    dic.insert_word("ngel");
+    board.insert_word("a~n", Word_footprint(2, Board::VERTICAL, 3));
+    {
+        Constraints constraints(Word_footprint(17, Board::VERTICAL, 2), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "ant"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "gel"));
+    }
+
+    // ---- vertical long constraint
+
+    dic.insert_word("thiss");
+    board.insert_word("this", Word_footprint(1, Board::VERTICAL, 4));
+    {
+        Constraints constraints(Word_footprint(21, Board::VERTICAL, 1), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "a"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "s"));
+    }
+}
+
+TEST(ConstraintsClass, create_end_constraints_horizontal)
+{
+    ASSERT_EQ(Board::EMPTY_FIELD, '~');
+
+    Dictionary dic;
+    dic.insert_word("route");
+    Board board(5, 5);
+
+    // ---- Horizontal right-top corner test
+    board.insert_word("te", Word_footprint(3, Board::HORIZONTAL, 2));
+    {
+        Constraints constraints(Word_footprint(0, Board::HORIZONTAL, 3), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "hit"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "rou"));
+    }
+
+    // ---- horizontal right-bottom corner test
+
+    dic.insert_word("shete");
+    board.insert_word("te", Word_footprint(23, Board::HORIZONTAL, 2));
+    {
+        Constraints constraints(Word_footprint(20, Board::HORIZONTAL, 3), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "pul"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "she"));
+    }
+
+    // ---- horizontal not continuous constraint.
+
+    dic.insert_word("na");
+    board.insert_word("a~t", Word_footprint(17, Board::HORIZONTAL, 3));
+    {
+        Constraints constraints(Word_footprint(16, Board::HORIZONTAL, 1), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "p"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "n"));
+    }
+
+    // ---- horizontal long constraint
+
+    dic.insert_word("shelp");
+    board.insert_word("help", Word_footprint(11, Board::HORIZONTAL, 4));
+    {
+        Constraints constraints(Word_footprint(10, Board::HORIZONTAL, 1), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "x"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "s"));
+    }
+}
+
+TEST(ConstraintsClass, create_end_constraints_vertical)
+{
+    ASSERT_EQ(Board::EMPTY_FIELD, '~');
+
+    Dictionary dic;
+    dic.insert_word("angel");
+    Board board(5, 5);
+
+    // ---- vertical left-bottom corner test
+
+    board.insert_word("el", Word_footprint(15, Board::VERTICAL, 2));
+    {
+        Constraints constraints(Word_footprint(0, Board::VERTICAL, 3), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "ant"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "ang"));
+    }
+
+    // ---- vertical right-bottom corner test
+
+    dic.insert_word("ngel");
+    board.insert_word("el", Word_footprint(19, Board::VERTICAL, 2));
+    {
+        Constraints constraints(Word_footprint(9, Board::VERTICAL, 2), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "nt"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "ng"));
+    }
+
+    // ---- vertical not continuous constraint
+
+    dic.insert_word("ala");
+    board.insert_word("a~n", Word_footprint(12, Board::VERTICAL, 3));
+    {
+        Constraints constraints(Word_footprint(2, Board::VERTICAL, 2), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "fr"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "al"));
+    }
+
+    // ---- vertical long constraint
+
+    dic.insert_word("xthis");
+    board.insert_word("this", Word_footprint(8, Board::VERTICAL, 4));
+    {
+        Constraints constraints(Word_footprint(3, Board::VERTICAL, 1), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "a"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "x"));
+    }
+}
