@@ -548,3 +548,148 @@ TEST(ConstraintsClass, create_path_constraints_vertical)
     }
 
 }
+
+TEST(ConstraintsClass, create_sides_constraints_horizontal)
+{
+    Dictionary dic;
+    Board board(5, 5);
+
+    // ---- single letter above test
+    // o - - - -
+    // X X X - -
+    // - - - - -
+    // - - - - -
+
+    dic.insert_word("op");
+    board.insert_word("o", Word_footprint(0, Board::HORIZONTAL, 1));
+    {
+        Constraints constraints(Word_footprint(5, Board::HORIZONTAL, 3), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "xax"));
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "xox"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "opa"));
+    }
+
+    // ---- single letter below test
+    // - X X X -
+    // - o - - -
+    // - - - - -
+    // - - - - -
+
+    dic.insert_word("al");
+    board.insert_word("l", Word_footprint(12, Board::HORIZONTAL, 1));
+    {
+        Constraints constraints(Word_footprint(7, Board::HORIZONTAL, 3), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "xax"));
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "xox"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "alb"));
+    }
+
+    // ---- single letter above and below in the same position test
+    // o - - - -
+    // X X X - -
+    // o - - - -
+    // - - - - -
+
+    dic.insert_word("oal");
+    board.insert_word("l", Word_footprint(10, Board::HORIZONTAL, 1));
+    {
+        Constraints constraints(Word_footprint(5, Board::HORIZONTAL, 2), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "xa"));
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "ox"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "al"));
+    }
+
+    // ---- letter above and below different position test
+    // o - - - -
+    // X X X - -
+    // o - o - -
+    // - - - - -
+
+    dic.insert_word("bl");
+    {
+        Constraints constraints(Word_footprint(5, Board::HORIZONTAL, 3), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "xax"));
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "xox"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "alb"));
+    }
+
+    // ---- letter above and letters below test
+    // o - - - -
+    // X X X X X
+    // o - o - -
+    // - - o - -
+    // o - o - -
+
+    dic.insert_word("llel");
+    board.insert_word("e", Word_footprint(17, Board::HORIZONTAL, 1));
+    board.insert_word("l", Word_footprint(22, Board::HORIZONTAL, 1));
+    board.insert_word("x", Word_footprint(20, Board::HORIZONTAL, 1));
+    {
+        Constraints constraints(Word_footprint(5, Board::HORIZONTAL, 5), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "aaxax"));
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "xcsox"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "allxa"));
+    }
+
+    Board board2(5, 5);
+    board2.insert_word( "~~o~l"
+                        "a~g~o"
+                        "~~~~~"
+                        "~~r~i"
+                        "x~~~t", Word_footprint(0, Board::HORIZONTAL, 25));
+
+    dic.insert_word("am");
+    dic.insert_word("ogor");
+    dic.insert_word("lolit");
+    {
+        Constraints constraints(Word_footprint(10, Board::HORIZONTAL, 5), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "amade"));
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "chill"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "mooil"));
+    }
+
+}
+
+TEST(ConstraintsClass, create_sides_constraints_vertical)
+{
+    Dictionary dic;
+    Board board(5, 5);
+
+    // ---- single letter above test
+    // o - - - -
+    // X X X - -
+    // - - - - -
+    // - - - - -
+
+    board.insert_word(  "~x~~o"
+                        "al~~a"
+                        "~p~d~"
+                        "x~~or"
+                        "~m~ss", Word_footprint(0, Board::VERTICAL, 1));
+
+    dic.insert_word("xo");
+    dic.insert_word("ala");
+    dic.insert_word("pod");
+    dic.insert_word("xor");
+    dic.insert_word("miss");
+    {
+        Constraints constraints(Word_footprint(5, Board::VERTICAL, 3), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "oaoxs"));
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "xoaax"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "oaoxi"));
+    }
+}
