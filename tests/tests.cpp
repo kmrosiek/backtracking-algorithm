@@ -79,6 +79,14 @@ std::string printable_to_string(const std::vector<char>& printable)
     return output;
 }
 
+/** Almost all tests for board class depened upon Board::EMPTY_FIELD variable, therefore
+ *  this test has to success in order to process following tests.
+ */
+TEST(BoardClass, initial_test)
+{
+    ASSERT_EQ(Board::EMPTY_FIELD, '~');
+}
+
 /** Checks if board.get_printable function prints empty board correctly.
  */
 TEST(BoardClass, get_printable)
@@ -97,8 +105,6 @@ TEST(BoardClass, get_printable)
  */
 TEST(BoardClass, insert_word)
 {
-    ASSERT_EQ(Board::EMPTY_FIELD, '~');
-
     Board board(5, 5);
     // Word size is larger than one in footprint.
     board.insert_word("ThisIsTooLong", Word_footprint(1,0,3));
@@ -126,8 +132,6 @@ TEST(BoardClass, insert_word)
 
 TEST(BoardClass, remove_word)
 {
-    ASSERT_EQ(Board::EMPTY_FIELD, '~');
-
     Board board(5, 5);
     board.insert_word("Ink", Word_footprint(0,0,3));
     board.insert_word("kart", Word_footprint(2,1,4));
@@ -164,13 +168,19 @@ bool intermediate_for_tests(const Dictionary& dic, const std::string& word)
     return dic.does_word_exist(word);
 }
 
+/** Almost all tests for board class depened upon Board::EMPTY_FIELD variable, therefore
+ *  this test has to success in order to process following tests.
+ */
+TEST(ConstraintsClass, initial_test)
+{
+    ASSERT_EQ(Board::EMPTY_FIELD, '~');
+}
+
 /** Tests if empty board produces no constraints for a given word.
  *  Checking constraint should return true for whatever word.
  */
 TEST(ConstraintsClass, create_constraints_empty_board)
 {
-    ASSERT_EQ(Board::EMPTY_FIELD, '~');
-
     Board board(5, 5);
     Dictionary dic;
     Constraints constraints(Word_footprint(5, Board::HORIZONTAL, 5), board.get_printable(),
@@ -185,8 +195,6 @@ TEST(ConstraintsClass, create_constraints_empty_board)
 
 TEST(ConstraintsClass, create_begin_constraints_horizontal)
 {
-    ASSERT_EQ(Board::EMPTY_FIELD, '~');
-
     Dictionary dic;
     dic.insert_word("angel");
     Board board(5, 5);
@@ -239,8 +247,6 @@ TEST(ConstraintsClass, create_begin_constraints_horizontal)
 
 TEST(ConstraintsClass, create_begin_constraints_vertical)
 {
-    ASSERT_EQ(Board::EMPTY_FIELD, '~');
-
     Dictionary dic;
     dic.insert_word("angel");
     Board board(5, 5);
@@ -294,8 +300,6 @@ TEST(ConstraintsClass, create_begin_constraints_vertical)
 
 TEST(ConstraintsClass, create_end_constraints_horizontal)
 {
-    ASSERT_EQ(Board::EMPTY_FIELD, '~');
-
     Dictionary dic;
     dic.insert_word("route");
     Board board(5, 5);
@@ -349,8 +353,6 @@ TEST(ConstraintsClass, create_end_constraints_horizontal)
 
 TEST(ConstraintsClass, create_end_constraints_vertical)
 {
-    ASSERT_EQ(Board::EMPTY_FIELD, '~');
-
     Dictionary dic;
     dic.insert_word("angel");
     Board board(5, 5);
@@ -402,3 +404,11 @@ TEST(ConstraintsClass, create_end_constraints_vertical)
         EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "x"));
     }
 }
+
+TEST(ConstraintsClass, create_path_constraints_horizontal)
+{
+    Dictionary dic;
+    dic.insert_word("angel");
+    Board board(5, 5);
+}
+//TEST(ConstraintsClass, create_path_constraints_vertical)
