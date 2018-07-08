@@ -218,8 +218,12 @@ void Constraints::create_vertical_sides_constraint()
 
 std::string Path_constraint::create_word(const std::string& word) const
 {
-    std::string composed_word;
-    return composed_word;
+    for(std::size_t i = 0; i < word.size(); ++i)
+        if(m_constraint.at(i) != Board::EMPTY_FIELD)
+            if(word[i] != m_constraint.at(i))
+                return std::string("xxxNotSatisfiedConstxxx");
+    // TODO Better solution should be found for the return value.
+    return word;
 }
 
 std::string Begin_constraint::create_word(const std::string& word) const

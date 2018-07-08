@@ -408,7 +408,143 @@ TEST(ConstraintsClass, create_end_constraints_vertical)
 TEST(ConstraintsClass, create_path_constraints_horizontal)
 {
     Dictionary dic;
-    dic.insert_word("angel");
-    Board board(5, 5);
+    Board board(5, 9);
+
+    // ---- horizontal single path test
+
+    dic.insert_word("dod");
+    board.insert_word("o", Word_footprint(2, Board::HORIZONTAL, 1));
+    {
+        Constraints constraints(Word_footprint(1, Board::HORIZONTAL, 3), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "xax"));
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "xox"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "dod"));
+    }
+
+    // ---- horizontal double path test
+
+    dic.insert_word("hello");
+    board.insert_word("e", Word_footprint(11, Board::HORIZONTAL, 1));
+    board.insert_word("l", Word_footprint(13, Board::HORIZONTAL, 1));
+    {
+        Constraints constraints(Word_footprint(10, Board::HORIZONTAL, 5), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "jacek"));
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "mello"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "hello"));
+    }
+
+
+    // ---- horizontal double neighbour path test
+
+    board.insert_word("ll", Word_footprint(22, Board::HORIZONTAL, 2));
+    {
+        Constraints constraints(Word_footprint(20, Board::HORIZONTAL, 5), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "jacek"));
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "mello"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "hello"));
+    }
+
+    // ---- horizontal first and last letter test
+
+    board.insert_word("h", Word_footprint(30, Board::HORIZONTAL, 1));
+    board.insert_word("o", Word_footprint(34, Board::HORIZONTAL, 1));
+    {
+        Constraints constraints(Word_footprint(30, Board::HORIZONTAL, 5), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "jacek"));
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "mello"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "hello"));
+    }
+
+    // ---- horizontal entire path test
+
+    board.insert_word("hello", Word_footprint(40, Board::HORIZONTAL, 5));
+    {
+        Constraints constraints(Word_footprint(40, Board::HORIZONTAL, 5), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "jacek"));
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "mello"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "hello"));
+    }
+
 }
-//TEST(ConstraintsClass, create_path_constraints_vertical)
+
+TEST(ConstraintsClass, create_path_constraints_vertical)
+{
+    Dictionary dic;
+    Board board(9, 5);
+
+    // ---- vertical single path test
+
+    dic.insert_word("dod");
+    board.insert_word("o", Word_footprint(18, Board::VERTICAL, 1));
+    {
+        Constraints constraints(Word_footprint(9, Board::VERTICAL, 3), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "xax"));
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "xox"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "dod"));
+    }
+
+    // ---- vertical double path test
+
+    dic.insert_word("hello");
+    board.insert_word("e", Word_footprint(11, Board::VERTICAL, 1));
+    board.insert_word("l", Word_footprint(29, Board::VERTICAL, 1));
+    {
+        Constraints constraints(Word_footprint(2, Board::VERTICAL, 5), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "jacek"));
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "mello"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "hello"));
+    }
+
+
+    // ---- vertical double neighbour path test
+
+    board.insert_word("ll", Word_footprint(22, Board::VERTICAL, 2));
+    {
+        Constraints constraints(Word_footprint(4, Board::VERTICAL, 5), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "jacek"));
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "mello"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "hello"));
+    }
+
+    // ---- vertical first and last letter test
+
+    board.insert_word("h", Word_footprint(6, Board::VERTICAL, 1));
+    board.insert_word("o", Word_footprint(42, Board::VERTICAL, 1));
+    {
+        Constraints constraints(Word_footprint(6, Board::VERTICAL, 5), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "jacek"));
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "mello"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "hello"));
+    }
+
+    // ---- vertical entire path test
+
+    board.insert_word("hello", Word_footprint(8, Board::VERTICAL, 5));
+    {
+        Constraints constraints(Word_footprint(8, Board::VERTICAL, 5), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "jacek"));
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "mello"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "hello"));
+    }
+
+}
