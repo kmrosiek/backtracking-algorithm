@@ -658,14 +658,14 @@ TEST(ConstraintsClass, create_crossing_constraints_vertical)
     // - - $ o - -
     // - - $ o o o
 
-    plan_the_board(board,   "xo~rno"
-                            "al~don"
+    plan_the_board(board,   "xo~ino"
+                            "~l~don"
                             "x~~~oo"
                             "za~o~a"
                             "be~eso");
 
     dic.insert_word("xorino");
-    dic.insert_word("alidon");
+    dic.insert_word("lidon");
     dic.insert_word("zaeo");
     dic.insert_word("bereso");
     {
