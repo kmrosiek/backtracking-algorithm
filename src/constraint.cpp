@@ -5,8 +5,6 @@
 #include <vector>
 #include <string>
 
-#include <iostream> // to be deleted
-
 Constraints::Constraints(const Word_footprint& footprint, const std::vector<char> board
         , const std::size_t board_width)
     : m_x(footprint.get_position() % board_width)
@@ -22,7 +20,6 @@ Constraints::Constraints(const Word_footprint& footprint, const std::vector<char
     create_constraints();
 }
 
-//bool Constraints::check_constraint(std::function<bool(const Dictionary&, const std::string&)>, const std::string&) const;
 bool Constraints::check_constraint(Dictionary_lookup lookup, const Dictionary& dictionary, const std::string& word) const
 {
     for(const std::unique_ptr<Base_constraint>& cons: m_constraints_container)
@@ -31,6 +28,7 @@ bool Constraints::check_constraint(Dictionary_lookup lookup, const Dictionary& d
 
     return true;
 }
+
 void Constraints::create_constraints()
 {
     if(Board::HORIZONTAL == m_direction)
@@ -53,13 +51,6 @@ void Constraints::create_constraints()
         //Debug info
     }
 
-    // DEBUG info
-    bool output = false;
-    if(output){
-        std::cout << "Number of constraints: " << m_constraints_container.size() << std::endl;
-        for(const std::unique_ptr<Base_constraint>& c : m_constraints_container)
-            std::cout << typeid(*c).name() << std::endl;
-    }
 }
 
 void Constraints::create_horizontal_begin_constraint()
@@ -199,6 +190,7 @@ void Constraints::create_vertical_path_constraint()
     if(!path_constraint.empty())
         m_constraints_container.emplace_back(new Path_constraint{path_constraint});
 }
+
 void Constraints::create_vertical_sides_and_crossing_constraint()
 {
     for(std::size_t letter_pos = 0; letter_pos < m_word_length; ++letter_pos)

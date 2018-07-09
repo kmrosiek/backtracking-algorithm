@@ -549,6 +549,7 @@ TEST(ConstraintsClass, create_path_constraints_vertical)
 
 }
 
+/// The function allows to insert characters into whole board with a single string.
 void plan_the_board(Board& board, const std::string& plan)
 {
     std::size_t row_length = board.get_width();
