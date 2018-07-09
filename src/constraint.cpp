@@ -254,13 +254,11 @@ std::string Crossing_constraint::create_word(const std::string& word) const
 
 std::string Up_left_constraint::create_word(const std::string& word) const
 {
-    std::string composed_word;
-    return composed_word;
+    return std::string(m_constraint + word[m_position]);
 }
 
 std::string Down_right_constraint::create_word(const std::string& word) const
 {
-    std::string composed_word;
-    return composed_word;
+    return std::string(word[m_position] + m_constraint);
 }
 

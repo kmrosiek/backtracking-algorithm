@@ -549,27 +549,36 @@ TEST(ConstraintsClass, create_path_constraints_vertical)
 
 }
 
+void plan_the_board(Board& board, const std::string& plan)
+{
+    std::size_t row_length = board.get_width();
+    for(std::size_t i = 0; i < plan.size() + row_length; i += row_length)
+    {
+        const std::string row = plan.substr(i, row_length);
+        board.insert_word(row, Word_footprint(i, Board::HORIZONTAL, row_length));
+    }
+}
+
 TEST(ConstraintsClass, create_sides_constraints_horizontal)
 {
     Dictionary dic;
     Board board(6, 6);
 
-    // Test scheme
-
-    board.insert_word(  "l~x~~~"
-                        "ol~~a~"
-                        "~~~~~~"
-                        "~~eo~a"
-                        "~xn~~n"
-                        "x~~l~o", Word_footprint(0, Board::HORIZONTAL, 36));
+    plan_the_board(board,   "l~x~~~"
+                            "ol~~a~"
+                            "~~~~~~"
+                            "~~eo~a"
+                            "~xn~~n"
+                            "x~~l~o");
 
     dic.insert_word("lol");
     dic.insert_word("le");
+    dic.insert_word("ai");
     dic.insert_word("ten");
     dic.insert_word("to");
     dic.insert_word("nano");
     {
-        Constraints constraints(Word_footprint(5, Board::VERTICAL, 3), board.get_printable(),
+        Constraints constraints(Word_footprint(12, Board::HORIZONTAL, 6), board.get_printable(),
                 board.get_width());
 
         EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "raone"));
@@ -577,6 +586,7 @@ TEST(ConstraintsClass, create_sides_constraints_horizontal)
         EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "lettin"));
     }
 }
+
 TEST(ConstraintsClass, create_sides_constraints_vertical)
 {
     Dictionary dic;
@@ -589,11 +599,11 @@ TEST(ConstraintsClass, create_sides_constraints_vertical)
     // - - $ o - -
     // - - $ o o o
 
-    board.insert_word(  "xo~~o~"
-                        "al~~a~"
-                        "x~~doo"
-                        "x~~o~a"
-                        "~~~lso", Word_footprint(0, Board::HORIZONTAL, 30));
+    plan_the_board(board,   "xo~~o~"
+                            "al~~a~"
+                            "x~~doo"
+                            "x~~o~a"
+                            "~~~lso");
 
     dic.insert_word("xor");
     dic.insert_word("ala");
@@ -601,7 +611,7 @@ TEST(ConstraintsClass, create_sides_constraints_vertical)
     dic.insert_word("no");
     dic.insert_word("also");
     {
-        Constraints constraints(Word_footprint(5, Board::VERTICAL, 3), board.get_printable(),
+        Constraints constraints(Word_footprint(2, Board::VERTICAL, 5), board.get_printable(),
                 board.get_width());
 
         EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "raone"));
