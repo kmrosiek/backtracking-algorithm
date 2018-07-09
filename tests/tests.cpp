@@ -619,3 +619,61 @@ TEST(ConstraintsClass, create_sides_constraints_vertical)
         EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "raona"));
     }
 }
+
+TEST(ConstraintsClass, create_crossing_constraints_horizontal)
+{
+    Dictionary dic;
+    Board board(6, 6);
+
+    plan_the_board(board,   "l~xh~b"
+                            "er~u~u"
+                            "~~~~~~"
+                            "sp~h~a"
+                            "~~~u~n"
+                            "xx~e~o");
+
+    dic.insert_word("less");
+    dic.insert_word("rup");
+    dic.insert_word("buyano");
+    dic.insert_word("huehue");
+    {
+        Constraints constraints(Word_footprint(12, Board::HORIZONTAL, 6), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "xurely"));
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "lettix"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "surely"));
+    }
+}
+
+TEST(ConstraintsClass, create_crossing_constraints_vertical)
+{
+    Dictionary dic;
+    Board board(6, 5);
+
+    // Test scheme
+    // o o $ - - -
+    // - o $ - - -
+    // o - $ o o o
+    // - - $ o - -
+    // - - $ o o o
+
+    plan_the_board(board,   "xo~rno"
+                            "al~don"
+                            "x~~~oo"
+                            "za~o~a"
+                            "be~eso");
+
+    dic.insert_word("xorino");
+    dic.insert_word("alidon");
+    dic.insert_word("zaeo");
+    dic.insert_word("bereso");
+    {
+        Constraints constraints(Word_footprint(2, Board::VERTICAL, 5), board.get_printable(),
+                board.get_width());
+
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "raver"));
+        EXPECT_FALSE(constraints.check_constraint(intermediate_for_tests, dic, "xoaax"));
+        EXPECT_TRUE(constraints.check_constraint(intermediate_for_tests, dic, "river"));
+    }
+}
