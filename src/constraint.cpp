@@ -38,7 +38,7 @@ void Constraints::create_constraints()
         create_horizontal_begin_constraint();
         create_horizontal_end_constraint();
         create_horizontal_path_constraint();
-        create_horizontal_sides_constraint();
+        create_horizontal_sides_and_crossing_constraint();
 
     }
     else if(Board::VERTICAL == m_direction)
@@ -46,7 +46,7 @@ void Constraints::create_constraints()
         create_vertical_begin_constraint();
         create_vertical_end_constraint();
         create_vertical_path_constraint();
-        create_vertical_sides_constraint();
+        create_vertical_sides_and_crossing_constraint();
     }
     else
     {
@@ -74,7 +74,8 @@ void Constraints::create_horizontal_begin_constraint()
     }
 
     if(!begin_constraint.empty())
-        m_constraints_container.emplace_back(new Begin_constraint{begin_constraint});
+        m_constraints_container.emplace_back(new Begin_constraint{ // Reverse string
+                std::string(begin_constraint.rbegin(), begin_constraint.rend())});
 }
 
 void Constraints::create_horizontal_end_constraint()
@@ -111,32 +112,40 @@ void Constraints::create_horizontal_path_constraint()
         m_constraints_container.emplace_back(new Path_constraint{path_constraint});
 }
 
-void Constraints::create_horizontal_sides_constraint()
+void Constraints::create_horizontal_sides_and_crossing_constraint()
 {
     for(std::size_t letter_pos = 0; letter_pos < m_word_length; ++letter_pos)
     {
-        std::string constr;
+        std::string up_or_left;
         for(int shift = 1, expr; (expr = m_x + m_y - (shift * m_width) + letter_pos) >= 0; ++shift)
         {
             if(m_fields[expr] != Board::EMPTY_FIELD)
-                constr += m_fields[expr];
+                up_or_left += m_fields[expr];
             else
                 break;
         }
-        if(!constr.empty())
-            m_constraints_container.emplace_back(new Up_left_constraint{constr, letter_pos});
 
-        constr.clear();
+        std::string down_or_right;
         for(std::size_t shift = 1, expr; (expr = m_x + m_y + (shift * m_width) + letter_pos)
                 < (m_width * m_height); ++shift)
         {
             if(m_fields[expr] != Board::EMPTY_FIELD)
-                constr += m_fields[expr];
+                down_or_right += m_fields[expr];
             else
                 break;
         }
-        if(!constr.empty())
-            m_constraints_container.emplace_back(new Down_right_constraint{constr, letter_pos});
+
+        if(!up_or_left.empty() && !down_or_right.empty())
+            m_constraints_container.emplace_back(new Crossing_constraint{std::string(
+                        up_or_left.rbegin(), up_or_left.rend()), down_or_right, letter_pos});
+
+        if(!up_or_left.empty())
+            m_constraints_container.emplace_back(new Up_left_constraint{
+                    std::string(up_or_left.rbegin(), up_or_left.rend()), letter_pos});
+
+        if(!down_or_right.empty())
+            m_constraints_container.emplace_back(
+                    new Down_right_constraint{down_or_right, letter_pos});
     }
 }
 
@@ -152,7 +161,8 @@ void Constraints::create_vertical_begin_constraint()
     }
 
     if(!begin_constraint.empty())
-        m_constraints_container.emplace_back(new Begin_constraint{begin_constraint});
+        m_constraints_container.emplace_back(new Begin_constraint{  // Reverse the string
+                std::string(begin_constraint.rbegin(), begin_constraint.rend())});
 }
 
 void Constraints::create_vertical_end_constraint()
@@ -187,7 +197,7 @@ void Constraints::create_vertical_path_constraint()
     if(!path_constraint.empty())
         m_constraints_container.emplace_back(new Path_constraint{path_constraint});
 }
-void Constraints::create_vertical_sides_constraint()
+void Constraints::create_vertical_sides_and_crossing_constraint()
 {
     for(std::size_t letter_pos = 0; letter_pos < m_word_length; ++letter_pos)
     {
@@ -200,7 +210,8 @@ void Constraints::create_vertical_sides_constraint()
                 break;
         }
         if(!constr.empty())
-            m_constraints_container.emplace_back(new Up_left_constraint{constr, letter_pos});
+            m_constraints_container.emplace_back(new Up_left_constraint{    // Reverse the string
+                    std::string(constr.rbegin(), constr.rend()), letter_pos});
 
         constr.clear();
         for(std::size_t shift = 1, expr; (expr = m_x + m_y + shift + (letter_pos * m_width)) % m_width != 0; ++shift)
@@ -234,6 +245,11 @@ std::string Begin_constraint::create_word(const std::string& word) const
 std::string End_constraint::create_word(const std::string& word) const
 {
     return (word + m_constraint);
+}
+
+std::string Crossing_constraint::create_word(const std::string& word) const
+{
+    return std::string{};
 }
 
 std::string Up_left_constraint::create_word(const std::string& word) const

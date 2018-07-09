@@ -30,12 +30,12 @@ class Constraints
         void create_horizontal_begin_constraint();
         void create_horizontal_end_constraint();
         void create_horizontal_path_constraint();
-        void create_horizontal_sides_constraint();
+        void create_horizontal_sides_and_crossing_constraint();
 
         void create_vertical_begin_constraint();
         void create_vertical_end_constraint();
         void create_vertical_path_constraint();
-        void create_vertical_sides_constraint();
+        void create_vertical_sides_and_crossing_constraint();
 
         std::vector<std::unique_ptr<Base_constraint>> m_constraints_container;
 
@@ -60,7 +60,7 @@ class Begin_constraint : public Base_constraint
 {
     public:
         Begin_constraint(const std::string& s) :
-            Base_constraint(std::string(s.rbegin(), s.rend())){} // Reverse the input.
+            Base_constraint(s){}
         std::string create_word(const std::string&) const;
 };
 class End_constraint : public Base_constraint
@@ -76,11 +76,25 @@ class Positioned_constraint
         std::size_t m_position;
 };
 
+class Crossing_constraint : public Base_constraint, public Positioned_constraint
+{
+    public:
+        Crossing_constraint(const std::string& begin, const std::string& end,
+                const std::size_t pos) : Base_constraint(begin)
+        {
+            m_position = pos;
+            m_ending = end;
+        }
+        std::string create_word(const std::string&) const;
+    private:
+        std::string m_ending;
+};
+
 class Up_left_constraint : public Base_constraint, public Positioned_constraint
 {
     public:
         Up_left_constraint(const std::string& s, const std::size_t pos) :
-            Base_constraint(std::string(s.rbegin(), s.rend())) // Reverse the input.
+            Base_constraint(s)
         {
             m_position = pos;
         }
