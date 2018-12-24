@@ -3,8 +3,8 @@ The application is capable of creating a crossword puzzle. This is applied solut
 
 # Table of contents
 1. [Getting started](#getting_started)
-	a) [Linux](#gtstLinux)
-	b) [Windows](#gtstWindows)
+	1. [Linux](#gtstLinux)
+	2. [Windows](#gtstWindows)
 
 # Getting started <a name="getting_started"></a>
 ## Linux <a name="gtstLinux"></a>
