@@ -44,10 +44,10 @@ Running application:
 ## Windows <a name="gtstWindows"></a>
 ### Prerequisites
 Follow instructions from given websites.
-* [MinGW](https://sourceforge.net/projects/mingw-w64/ "MinGW-w64 for Windows 32 and 64 bit.")
-* [CMake](https://cmake.org/download/ "CMake download official website.")
-* [Gtest](https://github.com/iat-cener/tonatiuh/wiki/Installing-Google-Test-For-Windows "Installing GoogleTest for Windows.")(Required only for testing)
-* [SDL2](https://www.libsdl.org/download-2.0.php "Download SDL2 library for Windows.")
++ [MinGW](https://sourceforge.net/projects/mingw-w64/ "MinGW-w64 for Windows 32 and 64 bit.")
++ [CMake](https://cmake.org/download/ "CMake download official website.")
++ [Gtest](https://github.com/iat-cener/tonatiuh/wiki/Installing-Google-Test-For-Windows "Installing GoogleTest for Windows.")(Required only for testing)
++ [SDL2](https://www.libsdl.org/download-2.0.php "Download SDL2 library for Windows.")
 
 ### Running the application 
 Compiling with MinGW:
