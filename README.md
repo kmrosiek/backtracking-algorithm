@@ -1,7 +1,13 @@
 # Crossword puzzle
 The application is capable of creating a crossword puzzle. This is applied solution to Constraint Satisfaction Problem.
-# Getting started
-## Linux
+
+# Table of contents
+1. [Getting started](#getting_started)
+	a) [Linux](#gtstLinux)
+	b) [Windows](#gtstWindows)
+
+# Getting started <a name="getting_started"></a>
+## Linux <a name="gtstLinux"></a>
 ### Prerequisites
 Build:
 ```
@@ -35,7 +41,7 @@ Running application:
 ./crossword_puzzle
 ```
 
-## Windows
+## Windows <a name="gtstWindows"></a>
 ### Prerequisites
 Follow instructions from given websites.
 ..* [MinGW](https://sourceforge.net/projects/mingw-w64/ "MinGW-w64 for Windows 32 and 64 bit.")
