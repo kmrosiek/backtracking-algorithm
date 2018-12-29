@@ -27,6 +27,18 @@ std::queue<std::string> shuffle_domain(std::vector<std::string>& vec_domain)
     return shuffled_domain;
 }
 
+#include <iostream>
+void visualise_board(std::vector<char> board)
+{
+    for(int y = 0; y < 10; y++)
+    {
+        for(int x = 0; x < 10; x++)
+        {
+            std::cout << board[y * 10 + x] << " ";
+        }
+        std::cout << std::endl;
+    }
+}
 
 bool backtracking()
 {
@@ -50,6 +62,7 @@ bool backtracking()
             dictionary.remove_word(word); // if removing option enabled.
 
             //Update_GUI(SDL_Graphics);
+            visualise_board(board.get_printable());
             if(true == backtracking())
                 return true; // finished
 
