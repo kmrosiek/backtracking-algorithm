@@ -1,15 +1,34 @@
 #include "word_footprint.hpp"
+#include "utils.hpp"
+#include "board.hpp"
+
+#include <iostream>
 
 Word_footprint::Word_footprint(uint32_t board_width, uint32_t board_height)
 {
-    //randoms();
-    position = 3;
-    direction = 1;
-    word_length = 4;
-    /*position = random_position(BOARD_WIDTH, BOARD_HEIGHT);
-      direction = random_direction(); // returns 0 or 1 (LEFT or RIGHT)
-      distance_to_border = calculate_distance_to_border(position, direction);
-      word_length = random_word_length(distance_to_border);*/
+    // Generate direction for 0 - horizontal, 1 - verticall.
+    direction = utils::generate_random(0, 1);
+
+    int distance_to_border;
+    /** board_width|height - 2, because fields count from 0 and there are no word
+     *  with a single letter, therefore, last field is excluded. */
+    if(direction == Board::HORIZONTAL)
+    {
+        position = utils::generate_random(0, board_width - 2);
+        distance_to_border = board_width - position;
+    }
+    else
+    {
+        position = utils::generate_random(0, board_height - 2);
+        distance_to_border = board_height - position;
+    }
+
+    const int MINIMAL_WORD_LENGTH = 2;
+    word_length = utils::generate_random(MINIMAL_WORD_LENGTH, distance_to_border);
+
+    std::cout << "bwidth: " << board_width << "   .bheight: " << board_height << "  .direction: " << direction;
+    std::cout << "  .pos: " << position << "  .dis_to_bord: " << distance_to_border;
+    std::cout << "  .word_length: " << word_length << std::endl;
 }
 
 Word_footprint::Word_footprint(uint32_t pos, uint32_t dir, uint32_t len) noexcept
