@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-Word_footprint::Word_footprint(uint32_t board_width, uint32_t board_height)
+Word_footprint::Word_footprint(const uint32_t board_width, const uint32_t board_height)
 {
     // Generate direction for 0 - horizontal, 1 - verticall.
     direction = utils::generate_random(0, 1);
@@ -12,16 +12,20 @@ Word_footprint::Word_footprint(uint32_t board_width, uint32_t board_height)
     int distance_to_border;
     /** board_width|height - 2, because fields count from 0 and there are no word
      *  with a single letter, therefore, last field is excluded. */
+    int pos_x, pos_y;
     if(direction == Board::HORIZONTAL)
     {
-        position = utils::generate_random(0, board_width - 2);
-        distance_to_border = board_width - position;
+        pos_x = utils::generate_random(0, board_width - 2);
+        distance_to_border = board_width - pos_x;
+        pos_y = utils::generate_random(0, board_height - 1);
     }
     else
     {
-        position = utils::generate_random(0, board_height - 2);
-        distance_to_border = board_height - position;
+        pos_y = utils::generate_random(0, board_height - 2);
+        distance_to_border = board_height - pos_y;
+        pos_x = utils::generate_random(0, board_width - 1);
     }
+    position = pos_x + pos_y * 10;
 
     const int MINIMAL_WORD_LENGTH = 2;
     word_length = utils::generate_random(MINIMAL_WORD_LENGTH, distance_to_border);
