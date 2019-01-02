@@ -3,6 +3,7 @@
 #include <random>
 #include <algorithm>
 #include <chrono>
+#include <iostream>
 
 namespace utils
 {
@@ -28,6 +29,18 @@ std::queue<std::string> shuffle_domain(std::vector<std::string>& vec_domain)
         shuffled_domain.push(word);
 
     return shuffled_domain;
+}
+
+void visualise_board(std::vector<char> board)
+{
+    for(int y = 0; y < 10; y++)
+    {
+        for(int x = 0; x < 10; x++)
+        {
+            std::cout << board[y * 10 + x] << " ";
+        }
+        std::cout << std::endl;
+    }
 }
 
 }
