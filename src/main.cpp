@@ -2,30 +2,14 @@
 #include "dictionary.hpp"
 #include "word_footprint.hpp"
 #include "constraint.hpp"
+#include "utils.hpp"
 
-#include <queue>
 #include <vector>
 #include <string>
-#include <algorithm>
-#include <chrono>
-#include <random>
 
 Board board(10,10);
 Dictionary dictionary;
 
-std::queue<std::string> shuffle_domain(std::vector<std::string>& vec_domain)
-{
-
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::default_random_engine e(seed);
-    std::shuffle(std::begin(vec_domain), std::end(vec_domain), e);
-
-    std::queue<std::string> shuffled_domain;
-    for(const std::string& word : vec_domain)
-        shuffled_domain.push(word);
-
-    return shuffled_domain;
-}
 
 #include <iostream>
 void visualise_board(std::vector<char> board)
@@ -53,7 +37,7 @@ bool backtracking()
         // Create domain - set of words with a given length and that satisfy given constraints.
         std::vector<std::string> ordered_domain = dictionary.create_domain(
                 random_footprint.get_word_length(), constraints);
-        std::queue<std::string> shuffled_domain = shuffle_domain(ordered_domain);
+        std::queue<std::string> shuffled_domain = utils::shuffle_domain(ordered_domain);
 
         while(!shuffled_domain.empty())
         {
