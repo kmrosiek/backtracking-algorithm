@@ -17,6 +17,7 @@ set(CW_PUZZLE_LIB_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/inc/board.hpp
     ${CMAKE_CURRENT_LIST_DIR}/inc/word_footprint.hpp
     ${CMAKE_CURRENT_LIST_DIR}/inc/utils.hpp
+    ${CMAKE_CURRENT_LIST_DIR}/inc/crossword.hpp
     )
 
 set(CW_PUZZLE_LIB_SOURCES
@@ -25,6 +26,7 @@ set(CW_PUZZLE_LIB_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/board.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/word_footprint.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/utils.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/crossword.cpp
     )
 
 
