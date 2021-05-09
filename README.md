@@ -2,9 +2,15 @@
 The application is capable of creating a crossword puzzle. This is applied solution to Constraint Satisfaction Problem.
 
 # Table of contents
-1. [Getting started](#getting_started)
+1. [Demo](#demo)
+2. [Getting started](#getting_started)
 	1. [Linux](#gtstLinux)
 	2. [Windows](#gtstWindows)
+
+# Demo <a name="demo"></a>
+<p align="center">
+  <img width="250" height="450" src="resources/csp.gif">
+</p>
 
 # Getting started <a name="getting_started"></a>
 ## Linux <a name="gtstLinux"></a>
