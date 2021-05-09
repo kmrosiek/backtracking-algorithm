@@ -9,7 +9,7 @@ The application is capable of creating a crossword puzzle. This is applied solut
 
 # Demo <a name="demo"></a>
 <p align="center">
-  <img width="250" height="450" src="resources/csp.gif">
+  <img src="resources/csp.gif">
 </p>
 
 # Getting started <a name="getting_started"></a>
